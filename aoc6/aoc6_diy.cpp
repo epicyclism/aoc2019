@@ -12,11 +12,8 @@ using graph_t = std::vector<std::vector<edge_t>>;
 vertex_id_t vertex_id_from_name(std::string const& nm)
 {
 	static std::map<std::string, vertex_id_t> nm_vertex;
-	if (auto it = nm_vertex.find(nm); it != nm_vertex.end())
-		return (*it).second;
-	auto rv = nm_vertex.size();
-	nm_vertex.insert(std::make_pair(std::string(nm), rv));
-	return rv;
+	auto v = nm_vertex.try_emplace(nm, nm_vertex.size());
+	return (*v.first).second;
 }
 
 void add_edge(vertex_id_t from, vertex_id_t to, graph_t& g)
@@ -32,26 +29,28 @@ void add_edge_undirected(vertex_id_t from, vertex_id_t to, graph_t& g)
 	add_edge(to, from, g);
 }
 
-std::vector<int> bfs(vertex_id_t id_from, graph_t const& g)
+auto bfs(vertex_id_t id_from, graph_t const& g)
 {
 	std::vector<int> d(g.size());
+	std::vector<int> p(g.size());
     std::vector<bool>   visited(g.size());
     std::queue<vertex_id_t> q;
     q.push(id_from);
-	int dist{ 0 };
     while (!q.empty())
     {
         auto u = q.front(); q.pop();
-        visited[u] = true;
-		d[u] = dist;
+		visited[u] = true;
         for (auto v :g[u])
         {
-            if(!visited[v])
-                q.push(v);
+			if (!visited[v])
+			{
+				d[v] = d[u] + 1;
+				p[v] = u;
+				q.push(v);
+			}
         }
-		++dist;
     }
-    return d;
+	return std::make_pair( d, p );
 }
 
 graph_t build_graph()
@@ -61,20 +60,27 @@ graph_t build_graph()
 	while (std::getline(std::cin, ln))
 	{
 		auto sep = ln.find(')');
-		add_edge(vertex_id_from_name(ln.substr(0, sep)), vertex_id_from_name(ln.substr(sep + 1)), g);
+		add_edge_undirected(vertex_id_from_name(ln.substr(0, sep)), vertex_id_from_name(ln.substr(sep + 1)), g);
 	}
 	return g;
 }
 
 auto pt1(graph_t const& g)
 {
-	auto distances = bfs(vertex_id_from_name("COM"), g);
+	auto [distances, _] = bfs(vertex_id_from_name("COM"), g);
 	return std::accumulate(distances.begin(), distances.end(), size_t(0));
 }
 
 auto pt2(graph_t const& g)
 {
-	auto distances = bfs(vertex_id_from_name("YOU"), g);
+	auto [distances, priors] = bfs(vertex_id_from_name("YOU"), g);
+	auto s = vertex_id_from_name("SAN");
+	while (s != vertex_id_from_name("YOU"))
+	{
+		auto p = priors[s];
+		std::cout << s << " <- " << p << "\n";
+		s = p;
+	}
 	return distances[vertex_id_from_name("SAN")] - 2;
 }
 

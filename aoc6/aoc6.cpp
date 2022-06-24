@@ -5,7 +5,6 @@
 
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/breadth_first_search.hpp>
-#include "boost/graph/boyer_myrvold_planar_test.hpp"
 
 using graph_t = boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS,
 	boost::property<boost::vertex_color_t, boost::default_color_type>>;
@@ -13,11 +12,8 @@ using graph_t = boost::adjacency_list<boost::vecS, boost::vecS, boost::undirecte
 size_t vertex_id_from_name(std::string const& nm)
 {
 	static std::map<std::string, size_t> nm_vertex;
-	if (auto it = nm_vertex.find(nm); it != nm_vertex.end())
-		return (*it).second;
-	auto rv = nm_vertex.size();
-	nm_vertex.insert(std::make_pair(std::string(nm), rv));
-	return rv;
+	auto v = nm_vertex.try_emplace(nm, nm_vertex.size());
+	return (*v.first).second;
 }
 
 graph_t build_graph()
@@ -36,7 +32,7 @@ auto pt1(graph_t& g)
 {
 	std::vector<size_t> distances(boost::num_vertices(g));
 	boost::breadth_first_search(g,
-		vertex(vertex_id_from_name("COM"), g),
+		vertex_id_from_name("COM"),
 		boost::visitor(
 			boost::make_bfs_visitor(
 				boost::record_distances(
@@ -49,7 +45,7 @@ auto pt2(graph_t& g)
 {
 	std::vector<int> distances(num_vertices(g));
 	boost::breadth_first_search(g,
-		boost::vertex(vertex_id_from_name("YOU"), g),
+		vertex_id_from_name("YOU"),
 		boost::visitor(
 			boost::make_bfs_visitor(
 				boost::record_distances(
@@ -62,7 +58,6 @@ int main()
 	auto start = std::chrono::system_clock::now();
 
 	auto g = build_graph();
-	std::cout << "graph " << (boost::boyer_myrvold_planarity_test(g) ? "is" : "isn't") << " planar\n";
 	std::cout << "part 1 = " << pt1(g) << "\n";
 	std::cout << "part 2 = " << pt2(g) << "\n";
 
