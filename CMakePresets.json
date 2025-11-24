@@ -1,0 +1,49 @@
+{
+    "version": 2,
+  "configurePresets": [
+    {
+      "name": "Release",
+      "displayName": "Configure preset using toolchain file, Release",
+      "description": "Sets generator, build and install directory",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_TOOLCHAIN_FILE": "/Users/paulranson/projects/vcpkg/scripts/buildsystems/vcpkg.cmake"
+      }
+    },
+    {
+      "name": "Debug",
+      "displayName": "Configure preset using toolchain file, Debug",
+      "description": "Sets generator, build and install directory",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_TOOLCHAIN_FILE": "/Users/paulranson/projects/vcpkg/scripts/buildsystems/vcpkg.cmake"
+      }
+    },
+    {
+      "name": "Release (Win)",
+      "displayName": "Configure preset using toolchain file, Release (Win)",
+      "description": "Sets generator, build and install directory",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_TOOLCHAIN_FILE": "D:\\source\\repos\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake"
+      }
+    },
+    {
+      "name": "Debug (Win)",
+      "displayName": "Configure preset using toolchain file, Debug (Win)",
+      "description": "Sets generator, build and install directory",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_TOOLCHAIN_FILE": "D:\\source\\repos\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake"
+      }
+    }
+  ]
+}
