@@ -1,4 +1,4 @@
-# aoc2015
-Advent Of Code 2018
+# aoc2019
+Advent Of Code 2019
 
 Revisiting clean sheet.

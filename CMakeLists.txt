@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.21)
 include(FetchContent)
-project (aoc_2018)
+project (aoc_2019)
 
 function(dump_cmake_variables)
     get_cmake_property(_variableNames VARIABLES)
