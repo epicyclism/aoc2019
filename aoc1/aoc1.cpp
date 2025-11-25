@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include <algorithm>
 #include <numeric>
 #include <ranges>
@@ -11,19 +12,37 @@
 
 auto get_input()
 {
-	return 0;
+	std::vector<int> v;
+	std::string ln;
+	while(std::getline(std::cin, ln))
+		v.emplace_back(sv_to_t<int>(ln));
+	return v;
 }
 
-int64_t pt1(auto const& in_addr_t)
+int64_t pt1(auto const& in)
 {
 	timer t("p1");
-	return 0;
+
+	return std::ranges::fold_left(in | std::ranges::views::transform([](auto v){ return v / 3 - 2;}), 0, std::plus<>());
 }
 
 int64_t pt2(auto const& in)
 {
 	timer t("p2");
-	return 0;
+	auto ff = [](auto f)
+		{
+			auto sm = 0;
+			auto fi = f;
+			while(1)
+			{
+				fi = fi / 3 - 2;
+				if(fi <= 0)
+					break;
+				sm += fi;
+			}
+			return sm;
+		};
+	return std::ranges::fold_left(in | std::ranges::views::transform(ff), 0, std::plus<>());
 }
 
 int main()
