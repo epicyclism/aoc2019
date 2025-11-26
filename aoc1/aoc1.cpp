@@ -19,14 +19,14 @@ auto get_input()
 	return v;
 }
 
-int64_t pt1(auto const& in)
+int pt1(auto const& in)
 {
 	timer t("p1");
 
 	return std::ranges::fold_left(in | std::ranges::views::transform([](auto v){ return v / 3 - 2;}), 0, std::plus<>());
 }
 
-int64_t pt2(auto const& in)
+int pt2(auto const& in)
 {
 	timer t("p2");
 	auto ff = [](auto f)
@@ -50,6 +50,6 @@ int main()
 	auto in = get_input();
 	auto p1 = pt1(in);
 	auto p2 = pt2(in);
-	fmt::println("pt1 = {}", p1);
-	fmt::println("pt2 = {}", p2);
+	fmt::println("pt1  = {}", p1);
+	fmt::println("pt2  = {}", p2);
 }
