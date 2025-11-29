@@ -15,10 +15,9 @@ struct line_t
 {
 	int x1_;
 	int y1_;
-	int d1_;
 	int x2_;
 	int y2_;
-	int d2_;
+	int d_;
 };
 
 std::vector<line_t> proc_line(std::string_view s)
@@ -29,11 +28,9 @@ std::vector<line_t> proc_line(std::string_view s)
 	int d = 0;
 	int xn = 0;
 	int yn = 0;
-	int dn = 0;
 	for(auto[m, di, r] : ctre::search_all<"([DLRU])(\\d+)">(s))
 	{
 		int rd = r.to_number<int>();
-		dn += rd;
 		switch(di.to_view().front())
 		{
 			case 'D':
@@ -49,10 +46,10 @@ std::vector<line_t> proc_line(std::string_view s)
 				yn = y + rd;
 				break;
 		}
-		v.emplace_back(x, y, d, xn, yn, dn);
+		v.emplace_back(x, y, xn, yn, d);
 		x = xn;
 		y = yn;
-		d = dn;
+		d += rd;
 	}
 	return v;
 }
@@ -103,12 +100,12 @@ std::pair<int, int> pt12(auto const& in)
 			if(auto i = intersect(l1, l2); i)
 			{
 				auto[x, y] = clean(i.value().first, i.value().second);
-				auto d = md(x, y);
-				if(d < p1 && d > 0)
-					p1 = d;
-				auto d2 = l1.d1_ + md(x, y, l1.x1_, l1.y1_) + 
-							l2.d1_ + md(x, y, l2.x1_, l2.y1_);
-				if(d2 < p2 && d > 0)
+				auto d1 = md(x, y);
+				if(d1 < p1 && d1 > 0)
+					p1 = d1;
+				auto d2 = l1.d_ + md(x, y, l1.x1_, l1.y1_) + 
+							l2.d_ + md(x, y, l2.x1_, l2.y1_);
+				if(d2 < p2 && d2 > 0)
 					p2 = d2;
 			}
 	}
