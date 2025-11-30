@@ -1,13 +1,6 @@
-#include <algorithm>
-#include <numeric>
-#include <ranges>
-
 #include <fmt/format.h>
-#include <fmt/ranges.h>
-
-#include "timer.h"
-
 #include "intcode.h"
+#include "timer.h"
 
 int64_t pt1(auto const& in)
 {

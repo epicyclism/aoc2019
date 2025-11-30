@@ -1,14 +1,7 @@
-#include <iostream>
-#include <string>
-#include <algorithm>
-#include <numeric>
-#include <ranges>
-
 #include <fmt/format.h>
-#include <fmt/ranges.h>
+
 
 #include "intcode.h"
-#include "ctre_inc.h"
 #include "timer.h"
 
 int64_t pt1(auto const& in)
