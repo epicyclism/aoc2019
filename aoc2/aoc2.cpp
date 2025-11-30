@@ -1,7 +1,3 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <array>
 #include <algorithm>
 #include <numeric>
 #include <ranges>
@@ -9,74 +5,9 @@
 #include <fmt/format.h>
 #include <fmt/ranges.h>
 
-#include "ctre_inc.h"
 #include "timer.h"
 
-struct intcode_wsp;
-void plus(intcode_wsp& ic);
-void times(intcode_wsp& ic);
-void invalid(intcode_wsp& ic);
-void end(intcode_wsp&);
-
-struct intcode_wsp
-{
-	size_t pc_ = 0;
-	std::vector<int64_t> mem_;
-	void (*acts_[100])(intcode_wsp&) =
-	{ 	invalid,    plus,   times, invalid, invalid, invalid, invalid, invalid, invalid, invalid,
-		invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid,
-		invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid,
-		invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid,
-		invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid,
-		invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid,
-		invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid,
-		invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid,
-		invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid,
-		invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, end
-	};
-	void execute()
-	{
-		acts_[mem_[pc_]](*this);
-	}
-};
-
-void plus(intcode_wsp& ic)
-{
-	ic.mem_[ic.mem_[ic.pc_ + 3]] = ic.mem_[ic.mem_[ic.pc_ + 1]] + ic.mem_[ic.mem_[ic.pc_ + 2]];
-//	fmt::println("+ {}", ic.wsp_);
-	ic.pc_ += 4;
-	ic.acts_[ic.mem_[ic.pc_]](ic);
-}
-
-void times(intcode_wsp& ic)
-{
-	ic.mem_[ic.mem_[ic.pc_ + 3]] = ic.mem_[ic.mem_[ic.pc_ + 1]] * ic.mem_[ic.mem_[ic.pc_ + 2]];
-//	fmt::println("* {}", ic.wsp_);
-	ic.pc_ += 4;
-	ic.acts_[ic.mem_[ic.pc_]](ic);
-}
-
-void invalid(intcode_wsp& ic)
-{
-	fmt::println("{}", ic.mem_);
-	fmt::println("bogus instruction");
-	return;
-}
-
-void end(intcode_wsp& ic)
-{
-	return;
-}
-
-auto get_input()
-{
-	intcode_wsp ic;
-	std::string ln;
-	std::getline(std::cin, ln);
-	for(auto i: ctre::search_all<"(-?\\d+)">(ln))
-		ic.mem_.emplace_back(i.to_number<int64_t>());
-	return ic;
-}
+#include "intcode.h"
 
 int64_t pt1(auto const& in)
 {

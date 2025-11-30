@@ -2,6 +2,7 @@
 
 #include <string_view>
 #include <chrono>
+#include <fmt/format.h>
 
 using namespace std::literals;
 
@@ -31,7 +32,8 @@ public:
 	{
 		auto end = std::chrono::high_resolution_clock().now();
 		if(!cancel_)
-			std::cout << "(" << v_ << ": " << std::chrono::duration_cast<std::chrono::microseconds>(end - start_).count() << "us)\n";
+			fmt::println("({}: {}us)", v_, std::chrono::duration_cast<std::chrono::microseconds>(end - start_).count());
+//			std::cout << "(" << v_ << ": " << std::chrono::duration_cast<std::chrono::microseconds>(end - start_).count() << "us)\n";
 	}
 	void cancel()
 	{

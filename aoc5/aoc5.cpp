@@ -5,25 +5,28 @@
 #include <ranges>
 
 #include <fmt/format.h>
+#include <fmt/ranges.h>
 
+#include "intcode.h"
 #include "ctre_inc.h"
 #include "timer.h"
 
-auto get_input()
-{
-	return 0;
-}
-
-int64_t pt1(auto const& in_addr_t)
+int64_t pt1(auto const& in)
 {
 	timer t("p1");
-	return 0;
+	auto wkr(in);
+	wkr.in_ = 1;
+	wkr.execute();
+	return wkr.buf_;
 }
 
 int64_t pt2(auto const& in)
 {
 	timer t("p2");
-	return 0;
+	auto wkr(in);
+	wkr.in_ = 5;
+	wkr.execute();
+	return wkr.buf_;
 }
 
 int main()
