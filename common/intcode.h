@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <array>
+#include <queue>
 #include <string>
 
 #include "ctre.hpp"
@@ -38,8 +39,9 @@ struct intcode_wsp
 		invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid,
 		invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, invalid, end
 	};
-    int64_t in_;
+    std::queue<int64_t> in_;
     int64_t buf_;
+    bool halted_ = false;
     std::array<uint8_t, 4> modes()
     {
         std::array<uint8_t, 4> m;
@@ -69,8 +71,17 @@ struct intcode_wsp
     }
 	void execute()
 	{
+        halted_ = false;
 		acts_[mem_[pc_] % 100](*this);
 	}
+    void reset()
+    {
+        halted_ = false;
+        pc_ = 0;
+        buf_ = 0;
+        while(!in_.empty())
+            in_.pop();
+    }
 };
 
 void plus(intcode_wsp& ic)
@@ -92,7 +103,8 @@ void times(intcode_wsp& ic)
 void input(intcode_wsp& ic)
 {
     auto m = ic.modes();
-    ic.mem_[ic.mem_[ic.pc_ + 1]] = ic.in_;
+    ic.mem_[ic.mem_[ic.pc_ + 1]] = ic.in_.front();
+    ic.in_.pop();
     ic.pc_ += 2;
     ic.acts_[ic.mem_[ic.pc_] % 100](ic);
 }
@@ -102,7 +114,8 @@ void output(intcode_wsp& ic)
     auto m = ic.modes();
     ic.buf_ = ic.argi(1, m);
     ic.pc_ += 2;
-    ic.acts_[ic.mem_[ic.pc_] % 100](ic);
+//    ic.acts_[ic.mem_[ic.pc_] % 100](ic);
+    return;
 }
 
 void jump_if_true(intcode_wsp& ic)
@@ -153,6 +166,7 @@ void invalid(intcode_wsp& ic)
 
 void end(intcode_wsp& ic)
 {
+    ic.halted_ = true;
 	return;
 }
 

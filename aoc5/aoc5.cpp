@@ -8,7 +8,7 @@ int64_t pt1(auto const& in)
 {
 	timer t("p1");
 	auto wkr(in);
-	wkr.in_ = 1;
+	wkr.in_.push(1);
 	wkr.execute();
 	return wkr.buf_;
 }
@@ -17,7 +17,7 @@ int64_t pt2(auto const& in)
 {
 	timer t("p2");
 	auto wkr(in);
-	wkr.in_ = 5;
+	wkr.in_.push(5);
 	wkr.execute();
 	return wkr.buf_;
 }
