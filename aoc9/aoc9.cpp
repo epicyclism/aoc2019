@@ -6,17 +6,22 @@
 
 #include <fmt/format.h>
 
+#include "intcode.h"
 #include "ctre_inc.h"
 #include "timer.h"
 
-auto get_input()
-{
-	return 0;
-}
-
-int64_t pt1(auto const& in_addr_t)
+int64_t pt1(auto const& in)
 {
 	timer t("p1");
+	auto wkr(in);
+	wkr.in_.push(1);
+	do
+	{
+		wkr.execute();
+		fmt::print("{} ", wkr.buf_);
+	}
+	while(!wkr.halted_);
+	fmt::println("");
 	return 0;
 }
 
